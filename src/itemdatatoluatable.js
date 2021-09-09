@@ -5,30 +5,40 @@ const XmlParser_1 = require("./XmlParser");
 let pools = XmlParser_1.XmlParser.loadPools(fs.readFileSync('assets/itempools.xml', 'utf8'));
 let meta = XmlParser_1.XmlParser.loadMeta(fs.readFileSync('assets/items_metadata.xml', 'utf8'));
 
-let list = "local itempools ={";
+let list = "local itempools ={\n";
 for (let k = 0; k <= 30; k++) {
-    list += ((JSON.stringify(pools[k].items.sort(function(x,y) { return x.id - y.id})).replace("[",`\n{`)).replace("]", "}")).replace("}}", `},}, -- ${pools[k].name}`);
+    for(let l = 0; l <= pools[k].items.length - 1; l++) {
+        if (l == 0) {
+            list += "{";
+        }
+        list += `{${pools[k].items[l].id},${pools[k].items[l].weight}},`;
+        if (l == pools[k].items.length - 1) {
+            list += `}, -- ${pools[k].name}`;
+            if (k != 30) {
+                list += "\n"
+            }
+        }
+    }
     if (k == 30) {
         list += "\n}";
     }
 }
-fs.writeFileSync(`src/itempools.txt`, list);
 
-let list2 = "EID.itemWeightsLookup= {\n";
+list += "\n\nEID.itemWeightsLookup= {\n";
 let count = 0;
 for (let k = 1; k <= 729; k++) {
-    if (meta.get(k)) {
+    if (meta.get(k) != null) {
         count++;
-        list2 += `[${k}]=${JSON.stringify(meta.get(k))},`;
+        list += `[${k}]=${JSON.stringify(meta.get(k))},`;
         if (count % 23 == 0) {
-            list2 += "\n";
+            list += "\n";
         }
         else {
-            list2 += " ";
+            list += " ";
         }
         if (k == 729) {
-            list2 += "\n}";
+            list += "\n}";
         }
     }
 }
-fs.writeFileSync(`src/items_metadata.txt`, list2);
+fs.writeFileSync(`src/moddedItemData.lua`, list);
