@@ -1,7 +1,7 @@
 # isaac-bagofcrafting2
-Generates a lua table to replace EID's Bag of Crafting Itempools table and/or EID.itemWeightsLookup table. 
+Generates a lua table to replace EID's Bag of Crafting `itemPools` table and/or `EID.itemWeightsLookup` table. 
 
-Note: The itempools.xml was taken from Item Pools Rework mod to use for testing. 
+Note: The `itempools.xml` was taken from Item Pools Rework mod to use for testing. 
 
 ## How To Use
 1) Open this project folder on VSCode.
